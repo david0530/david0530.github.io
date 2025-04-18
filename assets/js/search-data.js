@@ -398,8 +398,8 @@ ninja.data = [{
           description: "",
           section: "Books",handler: () => {
               window.location.href = "/books/the_godfather/";
-            },},{id: "news-a-simple-inline-announcement-with-markdown-emoji-sparkles-smile",
-          title: 'A simple inline announcement with Markdown emoji! :sparkles: :smile:',
+            },},{id: "news-our-paper-edge-boosted-graph-learning-for-functional-brain-connectivity-analysis-has-been-accepted-at-ieee-isbi-2025-congratulations-to-all-of-the-co-authors-see-the-blog-post-here",
+          title: 'Our paper Edge-Boosted Graph Learning For Functional Brain Connectivity Analysis has been accepted...',
           description: "",
           section: "News",},{id: "news-i-gave-a-poster-presentation-in-ieee-isbi-2025-in-houston-tx",
           title: 'I gave a poster presentation in IEEE ISBI 2025. in Houston, TX',
