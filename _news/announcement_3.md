@@ -5,4 +5,4 @@ inline: true
 related_posts: false
 ---
 
-A simple inline announcement with Markdown emoji! :sparkles: :smile:
+Our paper Edge-Boosted Graph Learning For Functional Brain Connectivity Analysis has been accepted at IEEE ISBI 2025. Congratulations to all of the co-authors! See the blog post here.
