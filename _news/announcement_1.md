@@ -5,4 +5,4 @@ inline: true
 related_posts: false
 ---
 
-I gave a poster presentation in IEEE ISBI 2025 in Houston, TX
+I gave a poster presentation in [IEEE ISBI 2025](https://biomedicalimaging.org/2025/). in Houston, TX
