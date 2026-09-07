@@ -1,0 +1,325 @@
+/* =============================================================================
+   David Yang — personal site
+   Design tokens first, then base, then the single surface: the one-page
+   academic profile in index.html.
+   ========================================================================== */
+
+/* -----------------------------------------------------------------------------
+   1. Tokens
+   Light is the source of truth; the dark blocks below override colour only.
+   -------------------------------------------------------------------------- */
+:root{
+  color-scheme:light dark;
+
+  /* type ------------------------------------------------------------------ */
+  --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;
+  --mono:'Martian Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+  --t-2xs:11px;     /* mono micro-label — legibility floor, do not go below */
+  --t-xs:12px;      /* mono label, nav item */
+  --t-md:16px;      /* running body copy */
+  --tr-mono:.09em;  /* letter-spacing for uppercase mono */
+
+  /* space — 4px base scale ------------------------------------------------ */
+  --s-1:4px;   --s-2:8px;   --s-3:12px;  --s-4:16px;  --s-5:24px;
+  --s-6:32px;  --s-7:48px;  --s-8:64px;
+
+  /* radius ---------------------------------------------------------------- */
+  --r-xs:3px;   /* chips, flat cards */
+  --r-md:8px;   /* monogram marks */
+  --r-lg:28px;  /* portrait / monogram tile */
+
+  /* motion ---------------------------------------------------------------- */
+  --ease:cubic-bezier(.4,0,.2,1);
+  --dur-fast:.15s;
+
+  /* colour — light -------------------------------------------------------- */
+  --paper:#FAFAF7;         /* page */
+  --surface-2:#F2F2EE;     /* recessed / hover */
+  --ink:#18191C;
+  --muted:#54575E;
+  --line:#E2E2DC;
+  --accent:#1E3EC8;
+  --accent-ink:#FFFFFF;    /* text on an accent fill */
+  --accent-soft:rgba(30,62,200,.07);
+  --chip-ring:rgba(24,25,28,.12);
+  --gold:#7E6620;
+}
+
+/* colour — dark.
+   Two blocks on purpose: the media query serves visitors on system dark, the
+   attribute selector serves an explicit choice from the theme toggle and must
+   win in both directions. KEEP THE VALUES IN SYNC. */
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --paper:#111216;
+    --surface-2:#1E2027;
+    --ink:#E9E9E4;
+    --muted:#A7AAB2;
+    --line:#292B32;
+    --accent:#9DAEFF;
+    --accent-ink:#111216;
+    --accent-soft:rgba(157,174,255,.12);
+    --chip-ring:rgba(255,255,255,.16);
+    --gold:#D6BC7C;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#111216;
+  --surface-2:#1E2027;
+  --ink:#E9E9E4;
+  --muted:#A7AAB2;
+  --line:#292B32;
+  --accent:#9DAEFF;
+  --accent-ink:#111216;
+  --accent-soft:rgba(157,174,255,.12);
+  --chip-ring:rgba(255,255,255,.16);
+  --gold:#D6BC7C;
+}
+
+/* -----------------------------------------------------------------------------
+   2. Base
+   -------------------------------------------------------------------------- */
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;background:var(--paper)}
+body{
+  background:var(--paper);
+  color:var(--ink);
+  font:400 var(--t-md)/1.55 var(--sans);
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+}
+::selection{background:var(--accent);color:var(--accent-ink)}
+a{color:var(--accent);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:3px}
+a:hover{text-decoration-thickness:2px}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:var(--r-xs)}
+img,svg{max-width:100%}
+
+.skip-link{
+  position:absolute;left:var(--s-4);top:-100px;z-index:100;
+  padding:var(--s-3) var(--s-4);border-radius:var(--r-xs);
+  background:var(--accent);color:var(--accent-ink);text-decoration:none;
+  font:500 var(--t-xs)/1 var(--mono);letter-spacing:var(--tr-mono);text-transform:uppercase;
+}
+.skip-link:focus{top:var(--s-4)}
+
+/* -----------------------------------------------------------------------------
+   3. Shell
+   -------------------------------------------------------------------------- */
+.one-page{
+  /* longhand, not the `background` shorthand: the shorthand would reset
+     background-color to transparent and the page would fall through to the
+     browser canvas (black under auto-dark). */
+  background-color:var(--paper);
+  background-image:linear-gradient(90deg,var(--accent-soft),transparent 28%);
+}
+.site-shell{
+  display:grid;grid-template-columns:250px minmax(0,1fr);gap:clamp(42px,7vw,84px);
+  max-width:1040px;margin:0 auto;padding:0 32px;align-items:start;
+}
+.one-page-content{min-width:0}
+.onepage-hero{display:block;padding:64px 0 28px;scroll-margin-top:20px}
+
+/* theme toggle ----------------------------------------------------------- */
+.theme-toggle{
+  display:grid;place-items:center;width:30px;height:30px;flex:0 0 auto;
+  background:none;border:1px solid var(--line);border-radius:var(--r-xs);
+  color:var(--muted);cursor:pointer;
+  transition:border-color var(--dur-fast) var(--ease),color var(--dur-fast) var(--ease);
+}
+.theme-toggle:hover{border-color:var(--accent);color:var(--accent)}
+.theme-toggle svg{width:15px;height:15px;display:block;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round}
+.theme-toggle .tt-moon{display:none}
+:root[data-theme="dark"] .theme-toggle .tt-sun{display:none}
+:root[data-theme="dark"] .theme-toggle .tt-moon{display:block}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]) .theme-toggle .tt-sun{display:none}
+  :root:not([data-theme="light"]) .theme-toggle .tt-moon{display:block}
+}
+
+/* -----------------------------------------------------------------------------
+   4. Identity card
+   -------------------------------------------------------------------------- */
+.identity-card{position:sticky;top:0;align-self:start;padding:68px 0 40px}
+.identity-card h1{font:650 31px/1.08 var(--sans);letter-spacing:-.035em}
+
+.identity-photo{
+  /* height:auto lets aspect-ratio win over the width/height attributes, which
+     are kept on the <img> so the slot is reserved before the file loads. */
+  display:block;width:156px;aspect-ratio:1;height:auto;margin-bottom:22px;
+  border-radius:var(--r-lg);background:var(--surface-2);box-shadow:0 0 0 1px var(--line);
+  object-fit:cover;object-position:center 35%;
+}
+
+.identity-role{margin-top:8px;color:var(--ink);font-size:13px;font-weight:600;line-height:1.4}
+.identity-location{margin-top:5px;color:var(--muted);font-size:13px}
+.education-line{margin-top:18px;font-size:13px;line-height:1.45;color:var(--muted)}
+.education-line strong{color:var(--ink);font-weight:600}
+.identity-contact{margin-top:11px;font-size:13px}
+.identity-contact a{color:var(--accent);text-decoration:none;font-weight:600}
+.identity-contact a:hover{text-decoration:underline;text-underline-offset:3px}
+.identity-note{
+  margin-top:20px;padding-top:15px;border-top:1px solid var(--line);
+  color:var(--muted);font-size:11px;font-weight:600;line-height:1.5;
+  letter-spacing:.05em;text-transform:uppercase;
+}
+
+nav.links{margin-top:20px;display:grid;grid-template-columns:repeat(2,max-content);gap:7px 18px}
+nav.links a,
+.section-heading>a{
+  color:var(--accent);text-decoration:none;font:600 13px/1.4 var(--sans);
+}
+nav.links a:hover,
+.section-heading>a:hover{text-decoration:underline;text-underline-offset:3px}
+
+/* -----------------------------------------------------------------------------
+   5. About
+   -------------------------------------------------------------------------- */
+.about-panel{min-width:0}
+.about-heading{display:flex;align-items:center;justify-content:space-between;gap:24px;margin-bottom:23px}
+.about-heading h2{
+  position:relative;padding-bottom:11px;font:650 30px/1.1 var(--sans);letter-spacing:-.035em;
+}
+.about-heading h2::after{
+  content:"";position:absolute;left:0;bottom:0;width:50px;height:3px;border-radius:99px;background:var(--accent);
+}
+.about-actions{display:flex;align-items:center;gap:18px}
+.section-nav{display:flex;flex-wrap:wrap;gap:16px}
+.section-nav a{color:var(--muted);font-size:13px;font-weight:600;text-decoration:none}
+.section-nav a:hover{color:var(--accent)}
+
+.about-panel>p{max-width:43em;font-size:16px;line-height:1.62;text-wrap:pretty}
+.about-panel>p+p{margin-top:13px}
+.about-panel strong{
+  font-weight:650;background:var(--accent-soft);
+  box-shadow:3px 0 var(--accent-soft),-3px 0 var(--accent-soft);
+}
+.entity-link{
+  display:inline-flex;align-items:center;gap:5px;padding:0 4px;border-radius:4px;
+  background:var(--accent-soft);color:var(--ink);text-decoration:none;white-space:nowrap;
+}
+.entity-link:hover{color:var(--accent)}
+.entity-link img{width:15px;height:15px;object-fit:contain;flex:0 0 auto}
+.entity-link strong{background:none;box-shadow:none}
+
+/* -----------------------------------------------------------------------------
+   6. Sections — experience, publications, awards, focus
+   -------------------------------------------------------------------------- */
+.compact-section{padding:30px 0;border-top:1px solid var(--line)}
+.compact-section h2{font:650 22px/1.25 var(--sans);letter-spacing:-.02em}
+.section-heading{display:flex;align-items:baseline;justify-content:space-between;gap:var(--s-4)}
+.compact-list{margin-top:12px}
+.compact-list>*+*{border-top:1px solid var(--line)}
+
+.compact-row{
+  display:grid;grid-template-columns:34px minmax(0,1fr) auto;gap:13px;align-items:center;padding:14px 0;
+}
+.compact-row.no-mark{grid-template-columns:minmax(0,1fr) auto;align-items:baseline}
+.compact-row h3{font:600 16px/1.35 var(--sans);letter-spacing:-.01em}
+.compact-row p{margin-top:2px;color:var(--muted);font-size:14px;line-height:1.45;text-wrap:pretty}
+.compact-row .row-when{color:var(--muted);font-size:13px;white-space:nowrap}
+
+/* Institutional marks sit on their own chip so they keep the contrast their
+   brand guidelines assume, in both themes. Logos drawn dark-on-transparent get
+   a white chip; the two that are drawn light-on-transparent (Woven's mint W,
+   NIWC's white-lettered seal) get their own brand-dark chip instead. */
+.row-mark{
+  display:grid;place-items:center;width:30px;height:30px;padding:3px;
+  border-radius:var(--r-md);background:#fff;box-shadow:0 0 0 1px var(--chip-ring);
+  color:inherit;text-decoration:none;overflow:hidden;
+}
+.row-mark img{display:block;max-width:100%;max-height:100%;object-fit:contain}
+.row-mark--ink{background:#0E2018;box-shadow:none}
+.row-mark--navy{background:#1A325D;box-shadow:none}
+.row-mark-pair{
+  grid-template-columns:1fr 1fr;place-items:center;gap:2px;width:34px;padding:3px 2px;
+}
+.row-mark-pair img{width:100%;height:auto;max-height:100%}
+
+.publication-list article{padding:14px 0}
+.publication-list article>p{
+  margin-bottom:4px;color:var(--muted);font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;
+}
+.publication-list .pub-accent{color:var(--gold)}
+.publication-list h3{max-width:48em;font:600 16px/1.4 var(--sans)}
+.publication-list h3 a{color:var(--ink);text-decoration:none}
+.publication-list h3 a:hover{color:var(--accent)}
+.publication-list .publication-authors{
+  margin-top:5px;color:var(--muted);font-size:13px;line-height:1.45;
+  letter-spacing:0;text-transform:none;font-weight:400;
+}
+.publication-list .publication-authors strong{color:var(--ink);font-weight:650}
+
+.focus-grid{margin-top:12px}
+.focus-grid>div{
+  display:grid;grid-template-columns:120px minmax(0,1fr);gap:18px;align-items:baseline;padding:13px 0;
+}
+.focus-grid>div+div{border-top:1px solid var(--line)}
+.focus-grid dt{
+  color:var(--muted);font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;
+}
+.focus-grid dd{font-size:14px;line-height:1.55;color:var(--ink);text-wrap:pretty}
+
+.onepage-footer{
+  padding:22px 0 30px;border-top:1px solid var(--line);
+  display:flex;justify-content:space-between;align-items:baseline;gap:var(--s-3) var(--s-4);flex-wrap:wrap;
+  font:500 var(--t-2xs)/1.8 var(--mono);letter-spacing:.12em;color:var(--muted);text-transform:uppercase;
+}
+.footer-credit{font-size:9.5px;letter-spacing:.07em;opacity:.75}
+.footer-credit a{color:inherit;text-decoration:none;border-bottom:1px solid var(--line)}
+.footer-credit a:hover{color:var(--accent);border-bottom-color:var(--accent)}
+
+/* -----------------------------------------------------------------------------
+   7. Responsive
+   -------------------------------------------------------------------------- */
+@media (max-width:720px){
+  .site-shell{display:block;padding:0 20px}
+  .identity-card{position:static;padding:30px 0 32px}
+  .onepage-hero{padding:0 0 24px}
+  .identity-photo{width:112px;border-radius:22px;margin-bottom:17px}
+  .identity-card h1{font-size:34px}
+  nav.links{display:flex;flex-wrap:wrap;gap:7px 18px}
+  .about-heading{margin-bottom:18px}
+  .about-heading h2{font-size:27px}
+  .section-nav{display:none}
+  .about-actions{gap:0}
+  .compact-section{padding:24px 0}
+  .compact-row{grid-template-columns:30px minmax(0,1fr);gap:11px}
+  .compact-row .row-when{grid-column:2;margin-top:-4px}
+  .compact-row.no-mark{grid-template-columns:minmax(0,1fr)}
+  .compact-row.no-mark .row-when{grid-column:1}
+  .focus-grid>div{grid-template-columns:1fr;gap:4px}
+}
+
+/* -----------------------------------------------------------------------------
+   8. Print
+   -------------------------------------------------------------------------- */
+@media print{
+  /* Matches the specificity of the two dark-theme blocks (0,2,0); a bare :root
+     would lose to them and print near-white text on white paper. */
+  :root,:root[data-theme="dark"],:root[data-theme="light"]{
+    --paper:#fff;--surface-2:#fff;--ink:#000;--muted:#333;
+    --line:#ccc;--accent:#000;--accent-soft:transparent;
+    --chip-ring:#ccc;--gold:#333;
+  }
+  .skip-link,.theme-toggle,.section-nav,.onepage-footer,noscript{display:none!important}
+  [hidden]{display:none!important}
+  body{background:#fff;font-size:12px}
+  .one-page{background-image:none}
+  .site-shell{max-width:none;padding:0;display:block}
+  .identity-card{position:static;padding:0}
+  a{color:#000;text-decoration:none}
+  .compact-section{padding:14px 0;break-inside:avoid}
+  .compact-row,.publication-list article,.focus-grid>div{break-inside:avoid}
+  .identity-card h1{font-size:26px}
+}
+
+/* -----------------------------------------------------------------------------
+   9. Reduced motion
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{
+    animation-duration:.01ms!important;animation-iteration-count:1!important;
+    transition-duration:.01ms!important;
+  }
+}
