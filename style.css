@@ -218,6 +218,8 @@ nav.links a:hover,
 }
 .compact-row.no-mark{grid-template-columns:minmax(0,1fr) auto;align-items:baseline}
 .compact-row h3{font:600 16px/1.35 var(--sans);letter-spacing:-.01em}
+.compact-row h3 a{color:inherit;text-decoration:none}
+.compact-row h3 a:hover{color:var(--accent)}
 .compact-row p{margin-top:2px;color:var(--muted);font-size:14px;line-height:1.45;text-wrap:pretty}
 .compact-row .row-when{color:var(--muted);font-size:13px;white-space:nowrap}
 
